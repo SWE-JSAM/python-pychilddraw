@@ -7,10 +7,11 @@ This is a total re-implementation but now in python. Most of the game assets are
 
 Start the program by executing the file barnkladd.py
 * Draw lines by moving the mouse
-* Add symbols by clicking a mouse button
-* Save you drawing by pressing "s"
-* Clear the screeen by pressing "space"
-* Change pens by pressing the "up arrow key "
+* Add symbols by clicking on a mouse button
+* Save you drawing by pressing the "s key"
+* Clear the screeen by pressing the "space key"
+* Change pens by pressing the "up arrow key"
+* To quit press the "Esc-key"
 
 <h2>Dependence</h2>
 
