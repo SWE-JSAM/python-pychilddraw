@@ -177,6 +177,9 @@ class BarnKladd:
 
         elif key == K_UP:
             self.pen.change_pen()
+            # to avoid jumping pen first frame
+            pos = pygame.mouse.get_pos()
+            self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
 
     def draw(self):
         self.screen.fill(BackgroundColor)
