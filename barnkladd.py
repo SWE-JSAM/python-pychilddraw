@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 """
 Barnkladd is a gamine clone see http://gnunux.info/projets/gamine/
 This is a total re-implementation but now in python.
 Most of the game assets are from gamine, see license
+The application is reimplemented by JSAM-SWE
 """
 import sys
 import os
@@ -10,7 +11,8 @@ import pygame
 import itertools
 from pygame.locals import *
 from random import randint, choice
-from time import gmtime, strftime
+from time import gmtime, strftime, sleep
+
 
 if not pygame.font:
     print('Warning, fonts disabled in pygame')
@@ -24,13 +26,15 @@ Sounds = ['bleep.wav', 'bonus.wav', 'brick.wav', 'bubble.wav', 'crash.wav',
           'paint1.wav', 'plick.ogg', 'prompt.wav', 'receive.wav', 'tri.ogg',
           'tuxok.wav', 'youcannot.wav']
 
+shapes = ['rectangle', 'circle']
 get_pen = itertools.cycle(['pencil1.png', 'pencil2.png'])
 BackgroundColor = (255, 255, 255)
+Rect = pygame.Rect(0, 0, 20, 20)
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 
-# TODO: Fix so that the files are loaded relative to source code
 def loadImage(figfile):
-    figfile_name = os.path.join('data', 'img', figfile)
+    figfile_name = os.path.join(base_dir, 'data', 'img', figfile)
     try:
         image = pygame.image.load(figfile_name).convert_alpha()
     except pygame.error as message:
@@ -42,7 +46,7 @@ def loadImage(figfile):
 
 # TODO: add sound check
 def sound_path(soundfile):
-    return os.path.join('data', 'sounds', soundfile)
+    return os.path.join(base_dir, 'data', 'sounds', soundfile)
 
 
 def get_color():
@@ -77,14 +81,18 @@ class BarnLine:
         pygame.draw.line(screen, self.color, self.start, self.stop, 4)
 
 
-# TODO: Add more symbols
 class BarnSymbol:
     def __init__(self):
-        self.rect = pygame.Rect(0, 0, 20, 20)
         self.color = get_color()
+        self.symbol = choice(shapes)
+        self.pos = (0, 0)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        if self.symbol == "rectangle":
+            Rect.center = self.pos
+            pygame.draw.rect(screen, self.color, Rect)
+        elif self.symbol == "circle":
+            pygame.draw.circle(screen, self.color, self.pos, 14)
 
 
 class BarnKladd:
@@ -99,7 +107,7 @@ class BarnKladd:
         self.screen = pygame.display.set_mode(sizes[0], set_display)
         # set up game speed fps (frames per second)
         self.clock = pygame.time.Clock()
-        self.fps = 30
+        self.fps = 40
 
         # Get a pen
         self.pen = Pen()
@@ -142,7 +150,7 @@ class BarnKladd:
 
     def mouseup(self, button, pos):
         symbol = BarnSymbol()
-        symbol.rect.center = pos
+        symbol.pos = pos
         self.symbols.append(symbol)
 
         if pygame.mixer:
@@ -174,6 +182,11 @@ class BarnKladd:
         elif key == K_s:
             savefigfileName = strftime("%Y-%m-%d-%H:%M:%S", gmtime()) + '.png'
             pygame.image.save(self.screen, savefigfileName)
+            # to get a flash as the file is saved
+            self.screen.fill((0, 0, 0))
+            pygame.display.flip()
+            sleep(0.1)
+            self.draw()
 
         elif key == K_UP:
             self.pen.change_pen()
@@ -195,5 +208,6 @@ class BarnKladd:
 
 # Start the game
 if __name__ == "__main__":
+    print(os.path.dirname(os.path.abspath(__file__)))
     game = BarnKladd()
     game.game_loop()
