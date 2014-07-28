@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=barnkladd
+Comment=Simple child draw application
+Exec=barnkladd
+Icon=barnkladd
+Terminal=false
+Type=Application
+Categories=Game;Education

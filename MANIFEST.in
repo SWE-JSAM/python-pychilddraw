@@ -1,0 +1,3 @@
+recursive-include barnkladd/data/img *
+recursive-include barnkladd/data/sounds *
+recursive-include extra *
