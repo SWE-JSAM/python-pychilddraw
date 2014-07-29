@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=barnkladd
+Name=PyChildDraw
 Comment=Simple child draw application
-Exec=barnkladd
-Icon=barnkladd
+Exec=pychilddraw
+Icon=pychilddraw
 Terminal=false
 Type=Application
 Categories=Game;Education

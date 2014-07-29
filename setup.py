@@ -1,33 +1,38 @@
 # Authors: Jörgen Samuelsson <samuelssonjorgen@gmail.com>
-# Barnkladd is a gamine clone see http://gnunux.info/projets/gamine/
+# PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
 # This is a total re-implementation but now in python.
 # Most of the game assets are from gamine, see license
 # The application is reimplemented by JSAM-SWE
-# 
-# barnkladd is free software: you can redistribute it and/or modify
+#
+# PyChildDraw is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# barnkladd is distributed in the hope that it will be useful,
+# PyChildDraw is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with barnkladd. If not, see <http://www.gnu.org/licenses/gpl.html>.
+# along with PyChildDraw. If not, see <http://www.gnu.org/licenses/gpl.html>.
 
 
 import os
+import re
 from setuptools import setup
+
+package_version = re.search('__version__ = "*.*.*"',
+        open(os.path.join('pychilddraw', 'pychilddraw.py'))
+        .read()).group().split('"')[1]
 
 with open('README.md') as f:
     long_description = f.read()
 
 def add_data():
     try:
-        data_files = [('share/applications', ['extra/barnkladd.desktop']),
-                ('share/pixmaps', ['extra/barnkladd.png'])]
+        data_files = [('share/applications', ['extra/pychilddraw.desktop']),
+                ('share/pixmaps', ['extra/pychilddraw.svg', 'extra/pychilddraw.png'])]
         return data_files
     except:
         return
@@ -38,16 +43,16 @@ else:
     data_files = None
 
 setup(
-    name = 'barnkladd',
-    version = '0.5.0',
+    name = 'pychilddraw',
+    version = package_version,
     author='Jörgen Samuelsson',
     author_email='samuelssonjorgen@gmail.com',
     install_requires=['setuptools', 'pygame>=1.9.1'],
-    url = 'https://github.com/SWE-JSAM/barnkladd',
+    url = 'https://github.com/SWE-JSAM/python-pychilddraw',
     description = 'A small children drawing program',
     long_description=long_description,
     license='GPLv3',
-    packages = ['barnkladd'],
+    packages = ['pychilddraw'],
     include_package_data=True,
     data_files=data_files,
     zip_safe=False,
@@ -63,7 +68,7 @@ setup(
     ],
     entry_points={
         'gui_scripts': [
-            'barnkladd = barnkladd.barnkladd:main',
+            'pychilddraw = pychilddraw.pychilddraw:main',
             ]
         },
 )

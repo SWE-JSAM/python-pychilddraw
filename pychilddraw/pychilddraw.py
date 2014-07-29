@@ -1,9 +1,23 @@
 #!/usr/bin/env python
 """
-Barnkladd is a gamine clone see http://gnunux.info/projets/gamine/
-This is a total re-implementation but now in python.
-Most of the game assets are from gamine, see license
-The application is reimplemented by JSAM-SWE
+# Authors: Jörgen Samuelsson <samuelssonjorgen@gmail.com>
+# PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
+# This is a total re-implementation but now in python.
+# Most of the game assets are from gamine, see license
+# The application is reimplemented by JSAM-SWE
+#
+# PyChildDraw is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# PyChildDraw is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PyChildDraw. If not, see <http://www.gnu.org/licenses/gpl.html>.
 """
 import sys
 import os
@@ -12,7 +26,7 @@ import itertools
 from pygame.locals import *
 from random import randint, choice
 from time import gmtime, strftime, sleep
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 
 if not pygame.font:
@@ -96,7 +110,7 @@ class BarnSymbol:
             pygame.draw.circle(screen, self.color, self.pos, 14)
 
 
-class BarnKladd:
+class ChildDraw:
     def __init__(self):
         # initiate mixer and pygame
         pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -215,14 +229,14 @@ class BarnKladd:
 def check_config():
     # check if save directory is present else make it
     user_dir = os.path.expanduser('~')
-    save_dir = os.path.join(user_dir, 'barnkladd')
+    save_dir = os.path.join(user_dir, 'pychilddraw')
     if not os.path.isdir(save_dir):
         os.mkdir(save_dir)
 
 
 def main():
     check_config()
-    game = BarnKladd()
+    game = ChildDraw()
     game.game_loop()
 
 # Start the game
