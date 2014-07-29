@@ -42,6 +42,7 @@ setup(
     version = '0.5.0',
     author='Jörgen Samuelsson',
     author_email='samuelssonjorgen@gmail.com',
+    install_requires=['setuptools', 'pygame>=1.9.1'],
     url = 'https://github.com/SWE-JSAM/barnkladd',
     description = 'A small children drawing program',
     long_description=long_description,

@@ -109,6 +109,8 @@ class BarnKladd:
         # set up game speed fps (frames per second)
         self.clock = pygame.time.Clock()
         self.fps = 40
+        user_dir = os.path.expanduser('~')
+        self.save_dir = os.path.join(user_dir, 'barnkladd')
 
         # Get a pen
         self.pen = Pen()
@@ -126,6 +128,7 @@ class BarnKladd:
 
         self.screen.fill(BackgroundColor)
         pygame.display.flip()
+        sleep(.1)
 
     def game_loop(self):
         # this is th updates in all
@@ -182,7 +185,8 @@ class BarnKladd:
 
         elif key == K_s:
             savefigfileName = strftime("%Y-%m-%d-%H:%M:%S", gmtime()) + '.png'
-            pygame.image.save(self.screen, savefigfileName)
+            savefig_name_path = os.path.join(self.save_dir, savefigfileName)
+            pygame.image.save(self.screen, savefig_name_path)
             # to get a flash as the file is saved
             self.screen.fill((0, 0, 0))
             pygame.display.flip()
@@ -207,7 +211,17 @@ class BarnKladd:
         self.pen.draw(self.screen, self.mouse)
         pygame.display.flip()
 
+
+def check_config():
+    # check if save directory is present else make it
+    user_dir = os.path.expanduser('~')
+    save_dir = os.path.join(user_dir, 'barnkladd')
+    if not os.path.isdir(save_dir):
+        os.mkdir(save_dir)
+
+
 def main():
+    check_config()
     game = BarnKladd()
     game.game_loop()
 
