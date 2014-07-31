@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 # Authors: Jörgen Samuelsson <samuelssonjorgen@gmail.com>
-# PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
+# PyChildDraw is a gamine clone (Small drawing program for children)
+# see http://gnunux.info/projets/gamine/
 # This is a total re-implementation but now in python.
 # Most of the game assets are from gamine, see license
 # The application is reimplemented by JSAM-SWE
@@ -23,10 +24,11 @@ import sys
 import os
 import pygame
 import itertools
+import math
 from pygame.locals import *
 from random import randint, choice
 from time import gmtime, strftime, sleep
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 
 
 if not pygame.font:
@@ -44,7 +46,7 @@ Sounds = ['bleep.wav', 'bonus.wav', 'brick.wav', 'bubble.wav', 'crash.wav',
 shapes = ['rectangle', 'circle']
 get_pen = itertools.cycle(['pencil1.png', 'pencil2.png'])
 BackgroundColor = (255, 255, 255)
-Rect = pygame.Rect(0, 0, 20, 20)
+Rect = pygame.Rect(0, 0, 23, 23)
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -87,10 +89,10 @@ class Pen:
 
 
 class BarnLine:
-    def __init__(self):
+    def __init__(self, color):
         self.start = (0, 0)
         self.stop = (0, 0)
-        self.color = get_color()
+        self.color = color
 
     def draw(self, screen):
         pygame.draw.line(screen, self.color, self.start, self.stop, 4)
@@ -113,7 +115,8 @@ class BarnSymbol:
 class ChildDraw:
     def __init__(self):
         # initiate mixer and pygame
-        pygame.mixer.pre_init(44100, -16, 2, 2048)
+        if pygame.mixer:
+            pygame.mixer.pre_init(44100, -16, 2, 2048)
         pygame.init()
 
         # set up screen by selecting the largest (sizes[0])
@@ -124,8 +127,10 @@ class ChildDraw:
         self.clock = pygame.time.Clock()
         self.fps = 40
         user_dir = os.path.expanduser('~')
-        self.save_dir = os.path.join(user_dir, 'barnkladd')
-
+        self.save_dir = os.path.join(user_dir, 'pychilddraw')
+        self.line_len = 20
+        self.line_color = get_color()
+        self.sound_level = 0.5
         # Get a pen
         self.pen = Pen()
         pygame.mouse.set_visible(False)
@@ -135,6 +140,7 @@ class ChildDraw:
             musicfile = 'BachJSBrandenburgConcertNo2.ogg'
             pygame.mixer.music.load(sound_path(musicfile))
             pygame.mixer.music.play(-1)  # -1 to get infinite loop
+            self.sound_level = pygame.mixer.music.get_volume()
 
         self.lines = []
         self.symbols = []
@@ -142,7 +148,6 @@ class ChildDraw:
 
         self.screen.fill(BackgroundColor)
         pygame.display.flip()
-        sleep(.1)
 
     def game_loop(self):
         # this is th updates in all
@@ -173,6 +178,7 @@ class ChildDraw:
 
         if pygame.mixer:
             SoundToPlay = pygame.mixer.Sound(sound_path(choice(Sounds)))
+            SoundToPlay.set_volume(self.sound_level)
             SoundToPlay.play()
 
     def mousemotion(self, buttons, pos, rel):
@@ -180,8 +186,14 @@ class ChildDraw:
         if self.first:
             rel = (0, 0)
             self.first = False
+        # Set color change at minimum line length of 20 pixels
+        if self.line_len < 20:
+            self.line_len += math.sqrt(rel[0] ** 2 + rel[1] ** 2)
+        else:
+            self.color = get_color()
+            self.line_len = 0
 
-        line = BarnLine()
+        line = BarnLine(self.color)
         line.start = (pos[0] - rel[0], pos[1] - rel[1])
         line.stop = pos
         self.lines.append(line)
@@ -213,6 +225,35 @@ class ChildDraw:
             pos = pygame.mouse.get_pos()
             self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
 
+        elif key == K_DOWN:
+            self.pen.change_pen()
+            # to avoid jumping pen first frame
+            pos = pygame.mouse.get_pos()
+            self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
+
+        elif key == K_RIGHT:
+            # increase sound level
+            if pygame.mixer:
+                self.sound_level += 0.1
+                if self.sound_level > 1:
+                    self.sound_level = 1
+                pygame.mixer.music.set_volume(self.sound_level)
+
+        elif key == K_LEFT:
+            # decrease sound level
+            if pygame.mixer:
+                self.sound_level -= 0.1
+                if self.sound_level < 0:
+                    self.sound_level = 0
+                pygame.mixer.music.set_volume(self.sound_level)
+
+        elif key == K_h:
+            # print help screen
+            help_image = loadImage('help_screen.png')
+            self.screen.blit(help_image, (100, 100))
+            pygame.display.flip()
+            sleep(4)
+
     def draw(self):
         self.screen.fill(BackgroundColor)
 
@@ -241,4 +282,4 @@ def main():
 
 # Start the game
 if __name__ == "__main__":
-    main() 
+    main()
