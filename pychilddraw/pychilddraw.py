@@ -26,13 +26,14 @@ import pygame
 import itertools
 import math
 from pygame.locals import *
-from random import randint, choice
-from time import gmtime, strftime, sleep
+from random import (randint, choice)
+from time import (gmtime, strftime)
 __version__ = "0.5.2"
 
 
-if not pygame.font:
-    print('Warning, fonts disabled in pygame')
+# if not pygame.font:
+#     print('Warning, fonts disabled in pygame')
+
 if not pygame.mixer:
     print('Warning, sound disable in pygame')
 
@@ -61,7 +62,6 @@ def loadImage(figfile):
     return image
 
 
-# TODO: add sound check
 def sound_path(soundfile):
     return os.path.join(base_dir, 'data', 'sounds', soundfile)
 
@@ -138,7 +138,13 @@ class ChildDraw:
         # background music
         if pygame.mixer:
             musicfile = 'BachJSBrandenburgConcertNo2.ogg'
-            pygame.mixer.music.load(sound_path(musicfile))
+            try:
+                pygame.mixer.music.load(sound_path(musicfile))
+            except pygame.error as message:
+                print('Missing file ', musicfile)
+                print('error ', message)
+                terminate()
+
             pygame.mixer.music.play(-1)  # -1 to get infinite loop
             self.sound_level = pygame.mixer.music.get_volume()
 
@@ -177,9 +183,14 @@ class ChildDraw:
         self.symbols.append(symbol)
 
         if pygame.mixer:
-            SoundToPlay = pygame.mixer.Sound(sound_path(choice(Sounds)))
-            SoundToPlay.set_volume(self.sound_level)
-            SoundToPlay.play()
+            try:
+                sound_file = sound_path(choice(Sounds))
+                SoundToPlay = pygame.mixer.Sound(sound_file)
+                SoundToPlay.set_volume(self.sound_level)
+                SoundToPlay.play()
+            except pygame.error as message:
+                print("Can't find sound file ", sound_file.split("/")[-1])
+                print("Error ", message)
 
     def mousemotion(self, buttons, pos, rel):
         # A ugly hack to remove the first strange line
@@ -216,7 +227,8 @@ class ChildDraw:
             # to get a flash as the file is saved
             self.screen.fill((0, 0, 0))
             pygame.display.flip()
-            sleep(0.1)
+            pygame.time.wait(100)
+            pygame.event.clear()  # Clear event queue
             self.draw()
 
         elif key == K_UP:
@@ -252,7 +264,8 @@ class ChildDraw:
             help_image = loadImage('help_screen.png')
             self.screen.blit(help_image, (100, 100))
             pygame.display.flip()
-            sleep(4)
+            pygame.time.wait(3000)
+            pygame.event.clear()  # Clear event queue
 
     def draw(self):
         self.screen.fill(BackgroundColor)
