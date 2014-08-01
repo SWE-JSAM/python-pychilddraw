@@ -28,7 +28,7 @@ import math
 from pygame.locals import *
 from random import (randint, choice)
 from time import (gmtime, strftime)
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 
 # if not pygame.font:
@@ -196,19 +196,31 @@ class ChildDraw:
                 self.mouse_motion(event.buttons, event.pos, event.rel)
 
     def mouse_up(self, button, pos):
-        symbol = ChildSymbol()
-        symbol.pos = pos
-        self.symbols.append(symbol)
+        # button left = 1, middle = 2, right = 3, wheel up = 4 and down = 5
+        print(button)
+        if button == 4 or button == 5:
+            self.pen.change_pen()
+            # to avoid jumping pen first frame
+            pos = pygame.mouse.get_pos()
+            self.color = get_color(COLORS[self.pen.name.split('_')[1].
+                                          split('.')[0]])
+            self.line_len = 0
+            self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
 
-        if pygame.mixer:
-            try:
-                sound_file = sound_path(choice(SOUNDS))
-                SoundToPlay = pygame.mixer.Sound(sound_file)
-                SoundToPlay.set_volume(self.sound_level)
-                SoundToPlay.play()
-            except pygame.error as message:
-                print("Can't find sound file ", sound_file.split("/")[-1])
-                print("Error ", message)
+        else:
+            symbol = ChildSymbol()
+            symbol.pos = pos
+            self.symbols.append(symbol)
+
+            if pygame.mixer:
+                try:
+                    sound_file = sound_path(choice(SOUNDS))
+                    SoundToPlay = pygame.mixer.Sound(sound_file)
+                    SoundToPlay.set_volume(self.sound_level)
+                    SoundToPlay.play()
+                except pygame.error as message:
+                    print("Can't find sound file ", sound_file.split("/")[-1])
+                    print("Error ", message)
 
     def mouse_motion(self, buttons, pos, rel):
         # A ugly hack to remove the first strange line
@@ -254,10 +266,16 @@ class ChildDraw:
             self.pen.change_pen()
             # to avoid jumping pen first frame
             pos = pygame.mouse.get_pos()
+            self.color = get_color(COLORS[self.pen.name.split('_')[1].
+                                          split('.')[0]])
+            self.line_len = 0
             self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
 
         elif key == K_DOWN:
             self.pen.change_pen()
+            self.color = get_color(COLORS[self.pen.name.split('_')[1].
+                                          split('.')[0]])
+            self.line_len = 0
             # to avoid jumping pen first frame
             pos = pygame.mouse.get_pos()
             self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
