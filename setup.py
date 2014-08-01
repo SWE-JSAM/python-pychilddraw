@@ -1,4 +1,4 @@
-# Authors: Jörgen Samuelsson <samuelssonjorgen@gmail.com>
+# Authors: Joergen Samuelsson <samuelssonjorgen@gmail.com>
 # PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
 # This is a total re-implementation but now in python.
 # Most of the game assets are from gamine, see license
@@ -45,7 +45,7 @@ else:
 setup(
     name = 'pychilddraw',
     version = package_version,
-    author='Jörgen Samuelsson',
+    author='Joergen Samuelsson',
     author_email='samuelssonjorgen@gmail.com',
     install_requires=['setuptools', 'pygame>=1.9.1'],
     url = 'https://github.com/SWE-JSAM/python-pychilddraw',

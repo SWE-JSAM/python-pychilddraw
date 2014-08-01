@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-# Authors: Jörgen Samuelsson <samuelssonjorgen@gmail.com>
+# Authors: Joergen Samuelsson <samuelssonjorgen@gmail.com>
 # PyChildDraw is a gamine clone (Small drawing program for children)
 # see http://gnunux.info/projets/gamine/
 # This is a total re-implementation but now in python.
@@ -45,7 +45,7 @@ Sounds = ['bleep.wav', 'bonus.wav', 'brick.wav', 'bubble.wav', 'crash.wav',
           'tuxok.wav', 'youcannot.wav']
 
 shapes = ['rectangle', 'circle']
-get_pen = itertools.cycle(['pencil1.png', 'pencil2.png'])
+get_pen = itertools.cycle(['pencil2.png', 'pencil3.png'])
 BackgroundColor = (255, 255, 255)
 Rect = pygame.Rect(0, 0, 23, 23)
 base_dir = os.path.dirname(os.path.abspath(__file__))
