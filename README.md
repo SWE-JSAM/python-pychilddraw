@@ -1,7 +1,7 @@
 PyChilddraw
 =========
 PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine
-This is a total re-implementation but now in python. All the sound assets are from gamine that is under GPL license. The pencils are drawn by Lisa Boman
+This is a total re-implementation but now in python. All the sound assets are from gamine that is under GPL license. The pencils and crayons are drawn by Lisa Boman.
 
 ## Background
 My daughter liked Gamine but I was not able to install it under my Linux distribution. To solve this I ported Gamine Python using Pygame.
@@ -27,7 +27,8 @@ If you don't have pip installed the process is little more complicated, see e.g.
 * Add symbols by clicking on a mouse button
 * Save you drawing by pressing the **s** key
 * Clear the screen by pressing the **space** key
-* Change pens by pressing the **up** or **down** arrow key or use the mouse wheel
+* Change pens by pressing the **up** arrow key or scroll the mouse wheel **up**
+* Change to crayon and change crayons by pressing **down** arrow key or scroll the mouse wheel **down**
 * Increase or decrease the sound volume by pressing **Right** and **Left** arrow key, respectively.
 * To quit press the **Esc** key
 * Get help by pressing the **h** key
@@ -38,6 +39,11 @@ The program is implemented in **Python 3** but should work with Python 2 as well
 (http://www.pygame.org/news.html).
 
 ## Change log
+###Version 0.6.0
+* Crayons are introduced.
+* The drawn line thickens depend on if crayon or pencil are used.
+* New controls: Scroll the mouse wheel **up** or arrow key **up** -> change pencil, **down** -> change crayon
+
 ###Version 0.5.3
 * New pencils with different colors.
 * The line color is now dependent on the color of the pencil

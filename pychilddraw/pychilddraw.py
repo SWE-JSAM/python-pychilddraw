@@ -28,7 +28,7 @@ import math
 from pygame.locals import *
 from random import (randint, choice)
 from time import (gmtime, strftime)
-__version__ = "0.5.3"
+__version__ = "0.6.0"
 
 
 # if not pygame.font:
@@ -55,12 +55,16 @@ PENCILS = ['pencil_black.png', 'pencil_blue.png', 'pencil_green.png',
            'pencil_pink.png', 'pencil_red.png', 'pencil_yellow.png',
            'pencil_feather.png']
 
+CRAYONS = ['crayon_black.png', 'crayon_blue.png', 'crayon_green.png',
+           'crayon_pink.png', 'crayon_red.png', 'crayon_yellow.png']
+
 # Color code in RGB or 'rainbow' for random
 COLORS = {'black': (0, 0, 0), 'blue': (0, 0, 255),
           'green': (0, 255, 0), 'pink': (255, 0, 255), 'red': (255, 0, 0),
           'yellow': (255, 255, 0), 'feather': 'rainbow'}
 
 GET_NEW_PEN = itertools.cycle(PENCILS)
+GET_NEW_CRAYON = itertools.cycle(CRAYONS)
 BACKGROUND_COLOR = (255, 255, 255)
 RECT = pygame.Rect(0, 0, 23, 23)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -96,11 +100,17 @@ def get_color(color):
 class Pen:
     def __init__(self):
         self.name = next(GET_NEW_PEN)
+        self.width = 4
         self.image = loadImage(self.name)
         self.mouseCurserHeight = self.image.get_height()
 
-    def change_pen(self):
-        self.name = next(GET_NEW_PEN)
+    def change_pen(self, draw_tool):
+        if draw_tool == 'pencil':
+            self.name = next(GET_NEW_PEN)
+            self.width = 4
+        elif draw_tool == 'crayon':
+            self.name = next(GET_NEW_CRAYON)
+            self.width = 6
         self.image = loadImage(self.name)
         self.mouseCurserHeight = self.image.get_height()
 
@@ -109,13 +119,14 @@ class Pen:
 
 
 class ChildLine:
-    def __init__(self, color):
+    def __init__(self, width, color):
         self.start = (0, 0)
         self.stop = (0, 0)
         self.color = color
+        self.width = width
 
     def draw(self, screen):
-        pygame.draw.line(screen, self.color, self.start, self.stop, 4)
+        pygame.draw.line(screen, self.color, self.start, self.stop, self.width)
 
 
 class ChildSymbol:
@@ -197,9 +208,11 @@ class ChildDraw:
 
     def mouse_up(self, button, pos):
         # button left = 1, middle = 2, right = 3, wheel up = 4 and down = 5
-        print(button)
-        if button == 4 or button == 5:
-            self.pen.change_pen()
+        if button in (4, 5):
+            if button == 4:
+                self.pen.change_pen('pencil')
+            else:
+                self.pen.change_pen('crayon')
             # to avoid jumping pen first frame
             pos = pygame.mouse.get_pos()
             self.color = get_color(COLORS[self.pen.name.split('_')[1].
@@ -235,7 +248,7 @@ class ChildDraw:
                                           split('.')[0]])
             self.line_len = 0
 
-        line = ChildLine(self.color)
+        line = ChildLine(self.pen.width, self.color)
         line.start = (pos[0] - rel[0], pos[1] - rel[1])
         line.stop = pos
         self.lines.append(line)
@@ -263,7 +276,7 @@ class ChildDraw:
             self.draw()
 
         elif key == K_UP:
-            self.pen.change_pen()
+            self.pen.change_pen('pencil')
             # to avoid jumping pen first frame
             pos = pygame.mouse.get_pos()
             self.color = get_color(COLORS[self.pen.name.split('_')[1].
@@ -272,7 +285,7 @@ class ChildDraw:
             self.mouse = (pos[0], pos[1] - self.pen.mouseCurserHeight)
 
         elif key == K_DOWN:
-            self.pen.change_pen()
+            self.pen.change_pen('crayon')
             self.color = get_color(COLORS[self.pen.name.split('_')[1].
                                           split('.')[0]])
             self.line_len = 0
