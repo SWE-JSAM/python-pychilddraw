@@ -1,8 +1,10 @@
 # Authors: Joergen Samuelsson <samuelssonjorgen@gmail.com>
+# Drawings: Lisa Boman <info@lisbom.se>, www.lisbom.se
 # PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
 # This is a total re-implementation but now in python.
 # Most of the game assets are from gamine, see license
-# The application is reimplemented by JSAM-SWE
+# The application is re-implemented by JSAM-SWE.
+# The illustrations are made by Lisa,
 #
 # PyChildDraw is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

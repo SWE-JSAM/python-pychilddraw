@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 """
-# Authors: Joergen Samuelsson <samuelssonjorgen@gmail.com>
-# PyChildDraw is a gamine clone (Small drawing program for children)
-# see http://gnunux.info/projets/gamine/
-# This is a total re-implementation but now in python.
-# Most of the game assets are from gamine, see license
-# The application is reimplemented by JSAM-SWE
-#
-# PyChildDraw is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# PyChildDraw is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with PyChildDraw. If not, see <http://www.gnu.org/licenses/gpl.html>.
+Authors: Joergen Samuelsson <samuelssonjorgen@gmail.com>
+Drawings: Lisa Boman <info@lisbom.se>, www.lisbom.se
+PyChildDraw is a gamine clone see http://gnunux.info/projets/gamine/
+This is a total re-implementation but now in python.
+Most of the game assets are from gamine, see license
+The application is re-implemented by JSAM-SWE.
+The illustrations are made by Lisa.
+
+PyChildDraw is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PyChildDraw is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PyChildDraw. If not, see <http://www.gnu.org/licenses/gpl.html>.
 """
 import sys
 import os
