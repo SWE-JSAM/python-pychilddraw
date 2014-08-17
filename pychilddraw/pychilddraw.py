@@ -29,7 +29,7 @@ import math
 from pygame.locals import *
 from random import (randint, choice)
 from time import (gmtime, strftime)
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 
 # if not pygame.font:
@@ -136,6 +136,7 @@ class ChildSymbol:
         self.symbol = choice(SHAPES)
         self.pos = (0, 0)
 
+
     def draw(self, screen):
         if self.symbol == "rectangle":
             RECT.center = self.pos
@@ -165,6 +166,7 @@ class ChildDraw:
         # Get a pen
         self.pen = Pen()
         pygame.mouse.set_visible(False)
+        self.pause = False  # to handle pause
 
         # background music
         if pygame.mixer:
@@ -238,9 +240,10 @@ class ChildDraw:
 
     def mouse_motion(self, buttons, pos, rel):
         # A ugly hack to remove the first strange line
-        if self.first:
+        if self.first or self.pause:
             rel = (0, 0)
             self.first = False
+            self.pause = False
         # Set color change at minimum line length of 20 pixels
         if self.line_len < 20:
             self.line_len += math.sqrt(rel[0] ** 2 + rel[1] ** 2)
@@ -266,6 +269,7 @@ class ChildDraw:
             self.symbols = []
 
         elif key == K_s:
+            pos = pygame.mouse.get_pos()
             savefigfileName = strftime("%Y-%m-%d-%H:%M:%S", gmtime()) + '.png'
             savefig_name_path = os.path.join(self.save_dir, savefigfileName)
             pygame.image.save(self.screen, savefig_name_path)
@@ -275,6 +279,7 @@ class ChildDraw:
             pygame.time.wait(100)
             pygame.event.clear()  # Clear event queue
             self.draw()
+            self.fix_pause(pos)
 
         elif key == K_UP:
             self.pen.change_pen('pencil')
@@ -312,11 +317,12 @@ class ChildDraw:
 
         elif key == K_h:
             # print help screen
+            pos = pygame.mouse.get_pos()
             help_image = loadImage('help_screen.png')
             self.screen.blit(help_image, (100, 100))
             pygame.display.flip()
             pygame.time.wait(3000)
-            pygame.event.clear()  # Clear event queue
+            self.fix_pause(pos)
 
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -329,6 +335,13 @@ class ChildDraw:
 
         self.pen.draw(self.screen, self.mouse)
         pygame.display.flip()
+
+    def fix_pause(self, pos):
+        # Fix so that no strange lines are draw at pause
+        pygame.event.get()
+        pygame.event.clear()  # Clear event queue
+        pygame.mouse.set_pos(pos)
+        self.pause = True
 
 
 def check_config():
